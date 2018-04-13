@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutManHInh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="vn.edu.topica.animation1.MainActivity">
+
+    <Button
+        android:id="@+id/btnXoay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Xoay button " />
+
+    <Button
+        android:id="@+id/btnXoayManHinh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Xoay màn hình" />
+
+    <Button
+        android:id="@+id/btnXoay3s"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Xoay 3s rồi tắt" />
+
+    <Button
+        android:id="@+id/btnHieuUng"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hiệu ứng list view " />
+</LinearLayout>

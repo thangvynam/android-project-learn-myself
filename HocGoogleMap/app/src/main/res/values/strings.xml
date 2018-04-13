@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">HocGoogleMap</string>
+    <string name="title_activity_maps">Map</string>
+    <string-array name="arrtype">
+        <item>MAP_TYPE_NORMAL</item>
+        <item>MAP_TYPE_SATELLITE</item>
+        <item>MAP_TYPE_TERRAIN</item>
+        <item>MAP_TYPE_HYBRID</item>
+        <item>MAP_TYPE_NONE</item>
+    </string-array>
+</resources>

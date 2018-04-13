@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">HocContentProvider</string>
+    <string name="sms">Đọc tin nhắn</string>
+    <string name="contact">Đọc danh bạ</string>
+</resources>

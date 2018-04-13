@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/hinh"
+    android:insetBottom="1000dp"
+    android:insetRight="1000dp"
+    android:insetLeft="1000dp"
+    android:insetTop="1000dp"
+    >
+
+</inset>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/background_dark"
+    android:backgroundTint="@android:color/background_dark"
+    android:orientation="vertical"
+    android:weightSum="1"
+    tools:context="vn.edu.topica.hocradiobutton.MainActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.03"
+        android:text="Bạn chọn :"
+        android:textColor="@android:color/background_light"
+        android:textSize="24sp" />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:weightSum="1">
+
+        <RadioButton
+            android:id="@+id/radNam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.26"
+            android:text="Mr.Nam" />
+
+        <RadioButton
+            android:id="@+id/radNhu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.26"
+            android:text="Bé Như" />
+
+        <RadioButton
+            android:id="@+id/radHung"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.26"
+            android:text="Anh Hùng" />
+
+        <RadioButton
+            android:id="@+id/radThuy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.26"
+            android:text="Cô Thuỳ" />
+    </RadioGroup>
+
+    <ImageView
+        android:id="@+id/imgHinh"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:layout_weight="0.03"
+        app:srcCompat="@drawable/nam" />
+
+    <ImageButton
+        android:id="@+id/btnThoat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        app:srcCompat="@android:drawable/btn_dialog" />
+</LinearLayout>

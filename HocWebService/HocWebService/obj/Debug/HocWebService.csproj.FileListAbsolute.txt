@@ -1,0 +1,6 @@
+E:\AndroidProject\HocWebService\HocWebService\bin\HocWebService.dll.config
+E:\AndroidProject\HocWebService\HocWebService\bin\HocWebService.dll
+E:\AndroidProject\HocWebService\HocWebService\bin\HocWebService.pdb
+E:\AndroidProject\HocWebService\HocWebService\obj\Debug\HocWebService.dll
+E:\AndroidProject\HocWebService\HocWebService\obj\Debug\HocWebService.pdb
+E:\AndroidProject\HocWebService\HocWebService\obj\Debug\HocWebService.csprojResolveAssemblyReference.cache

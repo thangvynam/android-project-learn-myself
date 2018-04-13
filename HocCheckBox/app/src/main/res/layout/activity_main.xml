@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:addStatesFromChildren="false"
+    android:background="@android:color/background_light"
+    android:orientation="vertical"
+    android:weightSum="1"
+    tools:context="vn.edu.topica.hoccheckbox.MainActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mời bạn nhập môn học yêu thích: "
+        android:textColor="@android:color/black"
+        android:textSize="24sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckBox
+        android:id="@+id/chkAndroid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:text="Lập trình Android"
+        android:textColor="@android:color/black" />
+
+    <CheckBox
+        android:id="@+id/chkWindowsPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lập trình Windows Phone"
+        android:textColor="@android:color/black" />
+
+    <CheckBox
+        android:id="@+id/chkiOs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="Lập trình iOs"
+        android:textColor="@android:color/black" />
+
+    <Button
+        android:id="@+id/btnChon"
+        android:layout_width="216dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Chọn" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_blue_dark"
+        android:fontFamily="serif"
+        android:text="Các môn học được chọn là: "
+        android:textColor="@android:color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        tools:targetApi="ice_cream_sandwich" />
+
+    <TextView
+        android:id="@+id/txtMonHoc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.07"
+        android:hint="Các môn sẽ hiện ở đây"
+
+
+        android:textColorHint="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold|italic" />
+
+</LinearLayout>
+
+
+
+
+
+
+

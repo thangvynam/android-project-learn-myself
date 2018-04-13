@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="vn.edu.topica.hocautocompletetextview.MainActivity"
+    android:weightSum="1">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nhập tên bạn :"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="24sp" />
+
+    <EditText
+        android:id="@+id/txtTen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Tên bạn được nhập ở đây"
+        android:inputType="textPersonName"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nhập nơi sinh"
+        android:textSize="24sp" />
+
+    <AutoCompleteTextView
+        android:id="@+id/autoTinhThanh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:completionThreshold="1" />
+
+    <Button
+        android:id="@+id/btnXacNhan"
+        android:layout_width="208dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Xác nhận" />
+
+    <TextView
+        android:id="@+id/txtThongTin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Thông tin của bạn"
+        android:textSize="24sp"
+        android:textStyle="italic" />
+
+</LinearLayout>

@@ -1,0 +1,3 @@
+﻿Inset trong android nghĩa là mình muốn làm nhỏ cái hình nhưng khi làm thì chỉ thay đổi đc layout 
+nhưng khôg thay đổi đc hình vì thề phải dùng inset 
+===> set dùng dể thu nhỏ kích thước tấm hình ko cần qua Photoshop

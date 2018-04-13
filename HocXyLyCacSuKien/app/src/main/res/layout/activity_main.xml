@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_vertical"
+    android:orientation="vertical"
+    android:weightSum="1"
+    tools:context="vn.edu.topica.hocxylycacsukien.MainActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nhập a:"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/txtA"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Nhập a tại đây "
+        android:inputType="number"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nhập b:"
+        android:textSize="24sp" />
+
+    <EditText
+        android:id="@+id/txtB"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Nhập b tại đây:"
+        android:inputType="number"
+        android:textStyle="italic" />
+
+    <Button
+        android:id="@+id/btnCong"
+        android:layout_width="179dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:onClick="xuLyPhepCong"
+        android:text="(+) onClickXML"
+        android:textAllCaps="false" />
+
+
+    <Button
+        android:id="@+id/btnTru"
+        android:layout_width="205dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="(-) anomous listener"
+        android:textAllCaps="false" />
+
+    <LinearLayout
+        android:layout_width="396dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnChia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(/) variable Listener" />
+
+        <Button
+            android:id="@+id/btnNhan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(*) variable Listener" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnAn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Activity as Listener" />
+
+    <Button
+        android:id="@+id/btnThoat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Expcilit class Listener " />
+
+    <Button
+        android:onClick="doiManHinh"
+        android:id="@+id/btnMoi"
+        android:layout_width="187dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="Đổi màn hình khác" />
+</LinearLayout>

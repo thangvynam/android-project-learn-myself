@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Learning Multi Language</string>
+    <string name="muaxan">Spring</string>
+    <string name="muaha">Summer</string>
+    <string name="muathu">Authumn</string>
+    <string name="muadong">Winter</string>
+</resources>

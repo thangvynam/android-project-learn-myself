@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Sleep now !</string>
+    <string-array name="arrLanguage">
+        <item>Vietnamese</item>
+        <item>English</item>
+        <item>Japanese</item>
+        <item>Spanish</item>
+        <item>Italian</item>
+        <item>French</item>
+        <item>German</item>
+    </string-array>
+</resources>

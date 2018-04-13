@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="android.dhkhtn.actionbarmenu.MainActivity" >
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/search"
+        android:orderInCategory="120"
+        android:showAsAction="always|withText"
+        android:title="Search"/>
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/share"
+        android:orderInCategory="140"
+        android:showAsAction="always"
+        android:title="Share"/>
+    <item
+        android:id="@+id/action_download"
+        android:icon="@drawable/download"
+        android:orderInCategory="160"
+        android:showAsAction="always"
+        android:title="Download"/>
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="180"
+        android:showAsAction="never"
+        android:title="Settings"/>
+    <item
+        android:id="@+id/action_about"
+        android:orderInCategory="200"
+        android:showAsAction="never"
+        android:title="About"/>
+
+</menu>
