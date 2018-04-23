@@ -1,30 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/txtNameUser"
-        android:layout_width="54dp"
-        android:layout_height="37dp"
-        android:gravity="center_vertical"
-        android:text="Name" />
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:orientation="vertical"
+    android:weightSum="1">
 
     <LinearLayout
+        android:id="@+id/layoutMessage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="100dp"
+        android:background="#C0C0C0"
+        >
 
-        <TextView
-            android:id="@+id/txtMessage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Message" />
+        <LinearLayout
+            android:layout_width="97dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:weightSum="1">
+
+            <ImageView
+                android:id="@+id/imgUser"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                app:srcCompat="@drawable/com_facebook_auth_dialog_background" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.70"
+            android:background="#C0C0C0"
+
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtNameUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="Name"
+                android:textColor="@color/authui_colorAccent"
+                android:textStyle="bold" />
+
+            <hani.momanii.supernova_emoji_library.Helper.EmojiconTextView
+                android:id="@+id/txtMessage"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:layout_alignParentStart="true"
+                android:background="@drawable/rounded_border_textview"
+                android:backgroundTint="#87CEEB"
+
+                android:gravity="center_vertical|center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/imgPic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@color/bodyTextColor" />
+
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/txtTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="35dp"
+            android:layout_gravity="bottom"
+            android:background="#C0C0C0"
             android:text="Time" />
+
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="#C0C0C0"
+        /><![CDATA[
+
+
+
+
+
+
+
+
+
+
+
+
+    >
+
+
+
+
+
+
+
+]]>
 </LinearLayout>
+
+

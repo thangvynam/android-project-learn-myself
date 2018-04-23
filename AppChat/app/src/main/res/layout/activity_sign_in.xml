@@ -53,10 +53,7 @@
             <ImageView
                 android:id="@+id/imgCamera"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.51"
-                android:adjustViewBounds="false"
-                android:cropToPadding="false"
+                android:layout_height="match_parent"
                 app:srcCompat="@drawable/camera" />
 
             <TextView

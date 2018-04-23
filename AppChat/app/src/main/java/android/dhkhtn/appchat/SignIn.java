@@ -50,7 +50,6 @@ public class SignIn extends AppCompatActivity {
     ImageView imgCamera;
     private FirebaseStorage storage;
     private  StorageReference storageRef;
-    private static boolean checkImage =false;
     private Uri filePath;
     private int DIVIDE_IMAGE=0;
     @Override
@@ -61,7 +60,6 @@ public class SignIn extends AppCompatActivity {
 
         storage= FirebaseStorage.getInstance();
         storageRef = storage.getReferenceFromUrl("gs://app-chat-500be.appspot.com");
-
 
         addControls();
         addEvents();
@@ -105,7 +103,6 @@ public class SignIn extends AppCompatActivity {
                             upLoadImage();
 
 
-
                         } else {
                             Toast.makeText(SignIn.this, "Thất bại", Toast.LENGTH_SHORT).show();
                         }
@@ -118,8 +115,9 @@ public class SignIn extends AppCompatActivity {
     }
 
     private void upLoadImage() {
-        Calendar calendar = Calendar.getInstance();
-        StorageReference mountainsRef = storageRef.child("image"+calendar.getTimeInMillis()+".png");
+
+
+        StorageReference mountainsRef = storageRef.child(edtNickName.getText().toString());
         if(DIVIDE_IMAGE ==0){ // chụp hình
             imgCamera.setDrawingCacheEnabled(true);
             imgCamera.buildDrawingCache();
@@ -139,8 +137,10 @@ public class SignIn extends AppCompatActivity {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                    checkImage =true;
+
                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
+
+                    writeToFile("imageUser.txt",downloadUrl.toString());
                     Toast.makeText(SignIn.this, "Thành công trong load hình", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(SignIn.this,MainActivity.class);
                     startActivity(intent);
@@ -152,7 +152,9 @@ public class SignIn extends AppCompatActivity {
             mountainsRef.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    checkImage =true;
+                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
+
+                    writeToFile("imageUser.txt",downloadUrl.toString());
                     Toast.makeText(SignIn.this, "Uploaded", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(SignIn.this,MainActivity.class);
                     startActivity(intent);
@@ -192,6 +194,7 @@ public class SignIn extends AppCompatActivity {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             imgCamera.setImageBitmap(imageBitmap);
+            imgCamera.setRotation(imgCamera.getRotation()-90);
         }
 
         if (requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK) {
@@ -199,6 +202,7 @@ public class SignIn extends AppCompatActivity {
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 imgCamera.setImageBitmap(bitmap);
+                imgCamera.setRotation(imgCamera.getRotation()-90);
             }
             catch (IOException e)
             {
