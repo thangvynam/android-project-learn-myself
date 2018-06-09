@@ -2,12 +2,17 @@ package android.dhkhtn.appchat;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.RingtoneManager;
+import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -19,6 +24,7 @@ import android.support.v7.view.ActionMode;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -46,25 +52,35 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 
 import java.io.FileInputStream;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
 import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
 import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
 
+import static android.dhkhtn.appchat.R.id.edtNickName;
+import static android.dhkhtn.appchat.R.id.edtPassword;
 import static android.dhkhtn.appchat.R.layout.activity_main;
 
 public class MainActivity extends AppCompatActivity {
@@ -77,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
     EmojIconActions emojIconActions;
     RecyclerView lstMessage;
     LinearLayout activity_main;
-    //ListView lstMessage;
     ScrollView scrView;
     MessageAdapter aDapter;
     private DatabaseReference mDatabase;
@@ -85,8 +100,45 @@ public class MainActivity extends AppCompatActivity {
     int notificationId;
     private FirebaseStorage storage;
     private StorageReference storageRef;
-    private ActionMode actionMode;
-    private boolean isMultiSelect = false;
+    String s="";
+
+    BroadcastReceiver receiverWifi=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ConnectivityManager connectivityManager=
+                    (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            if(connectivityManager.getActiveNetworkInfo()!=null){
+                edtText.setEnabled(true);
+                btnSend.setEnabled(true);
+                imgIcon.setEnabled(true);
+            }
+            else
+            {
+                edtText.setHint(getResources().getString(R.string.wifi));
+                edtText.setEnabled(false);
+                btnSend.setEnabled(false);
+                imgIcon.setEnabled(false);
+            }
+        }
+    };
+
+    /**
+     * Dispatch onPause() to fragments.
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Global.setNotification(true);
+        if(receiverWifi!=null)
+            unregisterReceiver(receiverWifi);
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        IntentFilter intentFilter=new 	IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(receiverWifi, intentFilter);
+
+    }
     /**
      * Dispatch incoming result to the correct fragment.
      *
@@ -97,27 +149,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SIGN_IN_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                Toast.makeText(this,
-                        "Successfully signed in. Welcome!",
-                        Toast.LENGTH_LONG)
-                        .show();
-                displayChatMessages();
-            } else {
-                Toast.makeText(this,
-                        "We couldn't sign you in. Please try again later.",
-                        Toast.LENGTH_LONG)
-                        .show();
 
-                // Close the app
-                finish();
-            }
-        }
         if (requestCode == GALLERY_PICK && resultCode == RESULT_OK){
             Calendar calendar = Calendar.getInstance();
             final String nameUser =readFile("nameUser.txt");
             final String urlImage =readFile("imageUser.txt");
+            final String birthday =readFile("birthday.txt");
+            final String phoneNumber =readFile("phoneNumber.txt");
+            final String sex =readFile("sex.txt");
+
             Uri uri = data.getData();
             StorageReference mountainsRef = storageRef.child(nameUser +calendar.getTimeInMillis());
             mountainsRef.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
@@ -126,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
                     if(task.isSuccessful()){
                         String download_url =task.getResult().getDownloadUrl().toString();
                         String id = mDatabase.push().getKey();
-                        mDatabase.child(id).setValue(new Message(id,edtText.getText().toString(), nameUser, urlImage,MessageType.IMAGE,download_url));
+                        mDatabase.child(id).setValue(new Message(id,edtText.getText().toString(), nameUser, urlImage,MessageType.IMAGE,download_url,birthday,sex,phoneNumber));
                         edtText.setText("");
                         edtText.requestFocus();
 
@@ -137,13 +177,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     /**
-     * Dispatch onPause() to fragments.
+     * Take care of popping the fragment back stack or finishing the activity
+     * as appropriate.
      */
     @Override
-    protected void onPause() {
-        super.onPause();///
-        Global.setNotification(true);
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(s.equals("NOT_BACK")){
+            Intent intent = new Intent(this, SignIn.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("EXIT", true);
+            startActivity(intent);
+        }
 
     }
 
@@ -155,24 +202,51 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==R.id.deleteAll){
+        if(item.getItemId()==R.id.mnuMembers) {
+            ArrayList<ItemMembers> data = new ArrayList<>();
+            for(Message ms : messages){
+                data.add(new ItemMembers(ms.getMessageUser(),ms.getUrlImage()));
+            }
+            Intent intent = new Intent(this,Members.class);
+            intent.putExtra(Global.ARRAY_NAME,data);
+            startActivity(intent);
+            overridePendingTransition(R.anim.anim_enter,R.anim.anim_exit);
 
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Take care of popping the fragment back stack or finishing the activity
+     * as appropriate.
+     */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if(Global.showLogo){
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    final Intent mainIntent = new Intent(MainActivity.this, BrandLogo.class);
+                    if (!MainActivity.this.isFinishing()) {
+                        MainActivity.this.startActivity(mainIntent);
+                        MainActivity.this.finish(); }
+                }
+            },0);
+        }
+
 
         addControls();
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+
             //startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build(),SIGN_IN_REQUEST_CODE);
             Intent intent = new Intent(MainActivity.this, SignIn.class);
             this.startActivityForResult(intent, SIGN_IN_REQUEST_CODE);
+            overridePendingTransition(R.anim.anim_enter,R.anim.anim_exit);
         } else {
             displayChatMessages();
             //lstMessage.setSelection(messages.size());
@@ -184,6 +258,11 @@ public class MainActivity extends AppCompatActivity {
         NotificationManager mNotifyMgr1 =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotifyMgr1.cancel(1);
+        Intent intent1 = getIntent();
+        s = intent1.getStringExtra("NOT_BACK");
+        if(s==null){
+            s="";
+        }
 
     }
 
@@ -200,13 +279,15 @@ public class MainActivity extends AppCompatActivity {
             text=new String(buffer);
         }catch (Exception e){
             e.printStackTrace();
-            Toast.makeText(this, "Error reading file !", Toast.LENGTH_SHORT).show();
         }
         return text;
     }
     private void addEvents() {
         final String nameUser =readFile("nameUser.txt");
         final String urlImage =readFile("imageUser.txt");
+        final String birthday =readFile("birthday.txt");
+        final String phoneNumber =readFile("phoneNumber.txt");
+        final String sex =readFile("sex.txt");
         edtText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -233,9 +314,23 @@ public class MainActivity extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 String id = mDatabase.push().getKey();
-                mDatabase.child(id).setValue(new Message(id,edtText.getText().toString(), nameUser, urlImage,MessageType.TEXT,""));
+
+                try {
+                    mDatabase.child(id).setValue(new Message(id,Encryption.encrypt(edtText.getText().toString(),Encryption.AES), nameUser, urlImage,MessageType.TEXT,"",birthday,sex,phoneNumber));
+                } catch (InvalidKeyException e) {
+                    e.printStackTrace();
+                } catch (NoSuchPaddingException e) {
+                    e.printStackTrace();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                } catch (BadPaddingException e) {
+                    e.printStackTrace();
+                } catch (IllegalBlockSizeException e) {
+                    e.printStackTrace();
+                }
                 edtText.setText("");
                 edtText.requestFocus();
 
@@ -244,10 +339,10 @@ public class MainActivity extends AppCompatActivity {
         imgAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CharSequence options[] = new CharSequence[] {"Choose photo", "SMS", "Email"};
+                CharSequence options[] = new CharSequence[] {getString(R.string.choosePhoto),getString(R.string.cancel)};
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setCancelable(false);
-                builder.setTitle("Select your option:");
+                builder.setTitle(getString(R.string.options));
                 builder.setItems(options, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -265,6 +360,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     private void chooseImage() {
         Intent galleryIntent = new Intent();
         galleryIntent.setType("image/*");
@@ -279,6 +375,7 @@ public class MainActivity extends AppCompatActivity {
         btnSend = findViewById(R.id.btnSend);
         edtText = findViewById(R.id.editText);
         lstMessage = findViewById(R.id.lstMessage);
+
         lstMessage.setHasFixedSize(true); // tối ưu hóa
         lstMessage.setItemViewCacheSize(20);
         lstMessage.setDrawingCacheEnabled(true);
@@ -287,7 +384,6 @@ public class MainActivity extends AppCompatActivity {
 
         emojIconActions = new EmojIconActions(getApplicationContext(), activity_main,edtText,imgIcon);
         emojIconActions.ShowEmojIcon();;
-
 
         LinearLayoutManager linearLayout = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
         lstMessage.setLayoutManager(linearLayout);
@@ -304,83 +400,99 @@ public class MainActivity extends AppCompatActivity {
         final String nameUser =readFile("nameUser.txt");
         Global.setNameUser(nameUser);
         messages = new ArrayList<Message>();
-        aDapter = new MessageAdapter(messages, getApplicationContext(), new OnItemClickListener() {
-            @Override
-            public void onItemClick(Message message) {
-                    deleteMessage(Global.getId());
-            }
-        });
-        lstMessage.setAdapter(aDapter);
-        mDatabase.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Message pt= (Message) dataSnapshot.getValue(Message.class);
-                messages.add(pt);
-                aDapter.notifyDataSetChanged();
 
-                lstMessage.scrollToPosition(messages.size()-1);
-                if(Global.isNotification()){
-                    if(!pt.getMessageUser().equals(nameUser)){
-                        String notify ;
-                        if(pt.getMessageType().equals(MessageType.IMAGE)){
-                            notify=pt.getMessageUser()+" sent a photo";
-                        }else{
-                            notify=pt.getMessageUser()+" : "+pt.getMessageText();
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                messages.clear();
+                try {
+                    showData(dataSnapshot);
+                } catch (NoSuchPaddingException e) {
+                    e.printStackTrace();
+                } catch (BadPaddingException e) {
+                    e.printStackTrace();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                        } catch (IllegalBlockSizeException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                } catch (InvalidKeyException e) {
+                    e.printStackTrace();
+                }
+                if(messages.size()!=0){
+                    Message pt= messages.get(messages.size()-1);
+                    lstMessage.scrollToPosition(messages.size()-1);
+                    if(Global.isNotification()) {
+                        if (!pt.getMessageUser().equals(nameUser)) {
+                            String notify;
+                            if (pt.getMessageType().equals(MessageType.IMAGE)) {
+                                notify = pt.getMessageUser() + getString(R.string.sendPhoto);
+                            } else {
+                                notify = pt.getMessageUser() + " : " + pt.getMessageText();
+                            }
+                            NotificationCompat.Builder mbuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(MainActivity.this).
+                                    setSmallIcon(R.drawable.ic_alarm_black_24dp).
+                                    setContentTitle(notify).
+                                    setContentText(DateFormat.format("dd-MM-yyyy (HH:mm)", pt.getMessageTime()));
+
+                            Intent resultIntent = new Intent(MainActivity.this, MainActivity.class);
+
+                            PendingIntent resultPendingIntent = PendingIntent.getActivity(
+                                    MainActivity.this,
+                                    0,
+                                    resultIntent, PendingIntent.FLAG_UPDATE_CURRENT
+                            );
+
+                            mbuilder.setContentIntent(resultPendingIntent);
+                            Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                            mbuilder.setSound(uri);
+
+                            notificationId = 1;
+                            NotificationManager mNotifyMgr =
+                                    (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                            // Builds the notification and issues it.
+                            mNotifyMgr.notify(notificationId, mbuilder.build());
+
                         }
-                        NotificationCompat.Builder mbuilder= (NotificationCompat.Builder) new NotificationCompat.Builder(MainActivity.this).
-                                setSmallIcon(R.drawable.ic_alarm_black_24dp).
-                                setContentTitle(notify).
-                                setContentText(DateFormat.format("dd-MM-yyyy (HH:mm)",pt.getMessageTime()));
-
-                        Intent resultIntent = new Intent(MainActivity.this, MainActivity.class);
-
-                        PendingIntent resultPendingIntent = PendingIntent.getActivity(
-                                MainActivity.this,
-                                0,
-                                resultIntent, PendingIntent.FLAG_UPDATE_CURRENT
-                        );
-
-                        mbuilder.setContentIntent(resultPendingIntent);
-                        Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                        mbuilder.setSound(uri);
-
-                        notificationId =1;
-                        NotificationManager mNotifyMgr =
-                                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                        // Builds the notification and issues it.
-                        mNotifyMgr.notify(notificationId, mbuilder.build());
-
                     }
                 }
 
 
-            }
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                aDapter = new MessageAdapter(messages, getApplicationContext(), new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Message message) {
+                        deleteMessage(Global.getId());
+                    }
+                });
+                lstMessage.setAdapter(aDapter);
+                aDapter.notifyDataSetChanged();
+                lstMessage.scrollToPosition(messages.size()-1);
 
             }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
         });
+
+    }
+
+    private void showData(DataSnapshot dataSnapshot) throws NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, UnsupportedEncodingException, InvalidKeyException {
+        for(DataSnapshot ds : dataSnapshot.getChildren()){
+            Message ms=ds.getValue(Message.class);
+            if(ms.getMessageType()==MessageType.TEXT) {
+                ms.setMessageText(Encryption.decrypt(ms.getMessageText(), Encryption.AES));
+            }
+            messages.add(ms);
+        }
     }
 
     private void deleteMessage(String id) {
        DatabaseReference mDatabaseTemp = FirebaseDatabase.getInstance().getReference("data").child(id);
         mDatabaseTemp.removeValue();
-        Toast.makeText(this, "Đã xóa thành công", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,getString(R.string.deleteSuccessfull), Toast.LENGTH_SHORT).show();
     }
+
 
 }

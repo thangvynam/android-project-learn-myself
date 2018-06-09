@@ -14,25 +14,58 @@ public class Message {
     private String id;
     private MessageType messageType;
     private String url_download;
+    private String birthday;
+    private String sex;
+    private String phoneNumber;
 
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
 
-    public Message(String messageText, String messageUser, long messageTime, String urlImage, String id,MessageType messageType,String url_download) {
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getBirthday() {
+
+        return birthday;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public Message(String messageText, String messageUser, long messageTime, String urlImage, String id, MessageType messageType, String url_download, String birthday, String sex, String phoneNumber) {
         this.messageText = messageText;
         this.messageUser = messageUser;
         this.messageTime = messageTime;
         this.urlImage = urlImage;
         this.id = id;
         this.messageType = messageType;
-        this.url_download=url_download;
+        this.url_download = url_download;
+        this.birthday = birthday;
+        this.sex = sex;
+        this.phoneNumber = phoneNumber;
     }
 
-    public Message(String id,String messageText, String messageUser, String urlImage,MessageType messageType,String url_download) {
+    public Message(String id, String messageText, String messageUser, String urlImage, MessageType messageType, String url_download, String birthday, String sex, String phoneNumber) {
         this.id=id;
         this.messageText = messageText;
         this.messageUser = messageUser;
         this.urlImage=urlImage;
         this.messageType = messageType;
         this.url_download=url_download;
+        this.birthday = birthday;
+        this.sex = sex;
+        this.phoneNumber=phoneNumber;
         // Initialize to current time
         messageTime = new Date().getTime();
 

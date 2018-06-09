@@ -1,3 +1,27 @@
 <resources>
-    <string name="app_name">App Chat</string>
+    <string name="app_name">Whisper</string>
+    <string name="hint_edittext">Write Message ... </string>
+    <string name="options">Select your option : </string>
+    <string name="choosePhoto">Choose a photo </string>
+    <string name="cancel">Cancel </string>
+    <string name="deleteSuccessfull">Delete Successfully </string>
+    <string name="birthday">Birthday</string>
+    <string name="sex">Gender</string>
+    <string name="numberPhone">Number phone</string>
+    <string name="member">Members</string>
+    <string name="nickname">Nickname</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="password">Password ( At least 7 character)</string>
+    <string name="signin">Sign-in</string>
+    <string name="wifi">You must turn on WIFI</string>
+    <string name="requirePassword">The password must contain at least 7 character</string>
+    <string name="requireEmail">Enter email</string>
+    <string name="existEmail">Email already exist</string>
+    <string name="otherPicture">Please choose other picture</string>
+    <string name="changePicture"> Long press into picture to change  </string>
+    <string name="takePhoto">Take a photo</string>
+
+
+
 </resources>

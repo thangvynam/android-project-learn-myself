@@ -24,6 +24,7 @@
         android:layout_alignParentTop="true"
         android:layout_weight="1.16"
         android:stackFromBottom="true"
+        android:background="#DCDCDC"
         android:transcriptMode="alwaysScroll">
 
     </android.support.v7.widget.RecyclerView>
@@ -41,7 +42,7 @@
             android:layout_alignParentBottom="true"
             android:layout_toLeftOf="@+id/imgIcon"
             android:layout_toRightOf="@+id/btnSend"
-            android:hint="Write Message" />
+            android:hint="@string/hint_edittext" />
 
         <ImageView
             android:id="@+id/imgIcon"

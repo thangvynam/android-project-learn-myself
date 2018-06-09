@@ -2,14 +2,18 @@ package android.dhkhtn.appchat;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +24,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,6 +35,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -46,7 +53,7 @@ import java.util.List;
 
 public class MessageAdapter extends  RecyclerView.Adapter<MessageAdapter.ViewHolder>{
     ArrayList<Message> dataMessage;
-    Context context;
+    private Context context;
     private final OnItemClickListener listener;
     private FirebaseStorage storage;
     private StorageReference storageRef;
@@ -110,14 +117,23 @@ public class MessageAdapter extends  RecyclerView.Adapter<MessageAdapter.ViewHol
      * @param position The position of the item within the adapter's data set.
      */
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         final Message message = dataMessage.get(position);
         holder.bind(message, listener);
         holder.txtNameUser.setText(message.getMessageUser());
         holder.txtTime.setText(DateFormat.format("dd-MM-yyyy HH:mm",message.getMessageTime()));
-
-        Picasso.with(context).load(message.getUrlImage()).into(holder.imgUser);
-
+        //Picasso.with(context).load(message.getUrlImage()).into(holder.imgUser);
+        String url = message.getUrlImage();
+        Glide.with(context).load(url).asBitmap().centerCrop().into(new BitmapImageViewTarget(holder.imgUser) {
+            @Override
+            protected void setResource(Bitmap resource) {
+                RoundedBitmapDrawable circularBitmapDrawable =
+                        RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                circularBitmapDrawable.setCircular(true);
+                holder.imgUser.setImageDrawable(circularBitmapDrawable);
+                holder.imgUser.setRotation(holder.imgUser.getRotation()+90);
+            }
+        });
         if(message.getMessageType().equals(MessageType.TEXT)){
             holder.imgPic.setVisibility(View.GONE);
             holder.txtMessage.setText(message.getMessageText());
@@ -126,12 +142,9 @@ public class MessageAdapter extends  RecyclerView.Adapter<MessageAdapter.ViewHol
             holder.txtMessage.setVisibility(View.GONE);
             Picasso.with(context).load(message.getUrl_download()).into(holder.imgPic);
 
-//            Glide.with(context).load(message.getUrl_download())  ---> cái này ra hình đứng
-//                    .thumbnail(0.5f)
-//                    .crossFade()
-//                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                    .into(holder.imgPic);
-
+        }
+        if (message.getMessageUser().equals(Global.getNameUser())){
+            holder.txtNameUser.setTextColor(Color.BLACK);
         }
     }
 
@@ -165,6 +178,10 @@ public class MessageAdapter extends  RecyclerView.Adapter<MessageAdapter.ViewHol
             imgUser=itemView.findViewById(R.id.imgUser);
             imgPic=itemView.findViewById(R.id.imgPic);
             imgUser.setRotation(imgUser.getRotation()-90);
+            Animation animation = AnimationUtils.loadAnimation(context,R.anim.scale_list);
+            itemView.setAnimation(animation);
+
+
         }
 
         public void bind(final Message message, final OnItemClickListener listener) {
@@ -176,6 +193,25 @@ public class MessageAdapter extends  RecyclerView.Adapter<MessageAdapter.ViewHol
                     listener.onItemClick(message);
                     return true;
                 }
+            });
+
+            imgUser.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Message ms = dataMessage.get(getAdapterPosition());
+                    Intent intent= new Intent(context, DetailPerson.class);
+                    Bundle mBundle = new Bundle();
+                    mBundle.putString(Global.USER_NAME, ms.getMessageUser());
+                    mBundle.putString(Global.USER_IMAGE, ms.getUrlImage());
+                    mBundle.putString(Global.BIRTHDAY, ms.getBirthday());
+                    mBundle.putString(Global.PHONE_NUMBER, ms.getPhoneNumber());
+                    mBundle.putString(Global.SEX, ms.getSex());
+                    intent.putExtras(mBundle);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.getApplicationContext().startActivity(intent);
+                    //context.startActivity(intent);
+
+                 }
             });
         }
     }

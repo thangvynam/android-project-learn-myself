@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Whisper</string>
+    <string name="hint_edittext">Nhập tin nhắn </string>
+    <string name="options">Lựa chọn : </string>
+    <string name="choosePhoto">Gửi ảnh  </string>
+    <string name="cancel">Hủy </string>
+    <string name="deleteSuccessfull">Xóa thành công </string>
+    <string name="sendPhoto"> đã gửi một ảnh trong nhóm </string>
+    <string name="birthday">Ngày sinh</string>
+    <string name="sex">Giới tính</string>
+    <string name="numberPhone">SĐT</string>
+    <string name="member">Thành viên</string>
+    <string name="nickname">Biệt hiệu</string>
+    <string name="male">Nam</string>
+    <string name="female">Nữ</string>
+    <string name="password">Mật khẩu ( ít nhất 7 kí tự)</string>
+    <string name="signin">Đăng ký</string>
+    <string name="wifi">Vui lòng kết nối mạng</string>
+    <string name="requirePassword">Mật khẩu phải ít nhất có 7 kí tự</string>
+    <string name="requireEmail">Nhập email</string>
+    <string name="existEmail">Email đã tồn tại</string>
+    <string name="otherPicture">Vui lòng chọn bức ảnh khác </string>
+    <string name="changePicture"> Bấm giữ để đổi hình  </string>
+    <string name="takePhoto">Chụp ảnh </string>
+</resources>

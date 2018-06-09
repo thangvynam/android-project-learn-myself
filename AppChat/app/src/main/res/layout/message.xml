@@ -6,6 +6,7 @@
     android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="120dp"
+
     android:orientation="vertical"
     android:weightSum="1">
 
@@ -13,8 +14,7 @@
         android:id="@+id/layoutMessage"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:background="#C0C0C0"
-        >
+        android:background="#DCDCDC">
 
         <LinearLayout
             android:layout_width="97dp"
@@ -34,7 +34,7 @@
             android:layout_width="200dp"
             android:layout_height="match_parent"
             android:layout_weight="0.70"
-            android:background="#C0C0C0"
+            android:background="#DCDCDC"
 
             android:orientation="vertical">
 
@@ -74,7 +74,7 @@
             android:layout_width="80dp"
             android:layout_height="35dp"
             android:layout_gravity="bottom"
-            android:background="#C0C0C0"
+            android:background="#DCDCDC"
             android:text="Time" />
 
     </LinearLayout>
@@ -83,8 +83,7 @@
         android:id="@+id/textView4"
         android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:background="#C0C0C0"
-        /><![CDATA[
+        android:background="#DCDCDC" /><![CDATA[
 
 
 
